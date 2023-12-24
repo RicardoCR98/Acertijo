@@ -1,9 +1,10 @@
 package com.example;
 import java.util.Scanner;
 public class Main {
+    static boolean flag=false;
     public static void main(String[] args) {
         Scanner leer = new Scanner(System.in);
-        int decision = 1, remador, sujeto1, sujeto2, sujeto3, devolver, devolver2;
+        int decision = 1, remador;
         System.out.println("Utilize Solamente Numeros");
         while (decision == 1) {
             mostrarOpciones();
@@ -20,8 +21,7 @@ public class Main {
         System.out.println("\u001B[36m****************************************");
         System.out.println("|           *** Opciones ***           |");
         System.out.println("****************************************\u001B[0m");
-        System.out.println(
-                "Tenemos:\n1- \u001B[33mA Caperucita\u001B[0m \n2- \u001B[33mA las Uvas\u001B[0m \n3- \u001B[33mAl Lobo\u001B[0m \n4- \u001B[33mAl Hombre\u001B[0m");
+        System.out.println("Tenemos:\n1- \u001B[33mA Caperucita\u001B[0m \n2- \u001B[33mA las Uvas\u001B[0m \n3- \u001B[33mAl Lobo\u001B[0m \n4- \u001B[33mAl Hombre\u001B[0m");
         System.out.print("A cuál desea pasar en el espacio de remador: ");
     }
     public static void mostrarGameover(String mensaje) {
@@ -30,23 +30,24 @@ public class Main {
         System.err.println("|          *** Game Over ***           |");
         System.err.println("****************************************\u001B[0m");
         System.err.println("\n" + mensaje + "\n");
-        System.out.println("¿Desea Continuar el Juego?");
-        System.out.println("1- Sí");
-        System.out.println("2- No");
-        System.out.print("-----> ");
+        System.out.println("¿Desea voler a jugar?");
+        System.out.print("1- Sí\n2- No\n-----> ");
         int decision = leer.nextInt();
+        switch (decision) {
+            case 1:mostrarOpciones();break;
+            case 2:System.exit(0);;break;
+        }
     }
     public static void seleccionarAcompañante(Scanner leer) {
         int sujeto1;
+        Animations.barcoImagen0();
+        System.out.println("[L][C][U]");
         System.out.println("\u001B[36m****************************************");
         System.out.println("|          *** Acompañante ***         |");
         System.out.println("****************************************\u001B[0m");
         System.out.println("Usted ha elegido al Hombre, ¿Quién acompaña al Hombre?");
-        System.out.println(
-                "1- \u001B[33mEl Lobo\u001B[0m  \n2- \u001B[33mLas Uvas\u001B[0m \n3- \u001B[33mCaperucita\u001B[0m");
-        System.out.print("-----> ");
+        System.out.print("1- \u001B[33mEl Lobo\u001B[0m  \n2- \u001B[33mLas Uvas\u001B[0m \n3- \u001B[33mCaperucita\u001B[0m\n----->");
         sujeto1 = leer.nextInt();
-        System.out.println(" ");
         switch (sujeto1) {
             case 1:mostrarGameover("Caperucita se Comio a las Uvas");break;
             case 2:mostrarGameover("El Lobo se Comio a Caperucita");break;
@@ -55,81 +56,95 @@ public class Main {
     }
     public static void acompañanteCaperucita(Scanner leer) {
         int sujeto2;
-        System.out.println("Usted ha Elegido \u001B[33m Caperucita \u001B[0m, Ahora");
-        Animations.Barco1(1);
+        if (flag) {Animations.Barco3(1); flag = false;}else{Animations.Barco1(1);}
         Animations.barcoImagen1();
-        System.out.println("\n\nCaperucita Esta del Otro Lado del Rio");
-        System.out.println("El Hombre Vuelve y Ahora, ¿A Quien Lleva?");
-        System.out.println("1- \u001B[33mEl Lobo \u001B[0m\n2- \u001B[33mLas Uvas\u001B[0m\n-----> ");
+        System.out.println("[L][U]                                      [C]");
+        System.out.print("\n1- \u001B[33mEl Lobo \u001B[0m\n2- \u001B[33mLas Uvas\u001B[0m\n-----> ");
         sujeto2 = leer.nextInt();
-        System.out.println(" ");
         switch (sujeto2) {
             case 1:llevarLoboConCaperucita(leer);break;
-            case 2:llevarUvasConCaperucita(leer);break;
+            case 2:llevarUvasACaperucita(leer);break;
         }
     }
-
     public static void llevarLoboConCaperucita(Scanner leer) {
-        int devolver;
+        int devolver ;
         Animations.Barco2(1);
         Animations.barcoImagen2();
-        System.out.println("\n\nUsted ha Elegido Al \u001B[32mLobo\u001B[0m, Ahora");
-        System.out.println("El Lobo Esta del Otro Lado del Rio con Caperucita");
-        System.out.println("¿Desea Regresar con Alguno?");
-        System.out.println("Digite: \n1- Ninguno\n2- El Lobo\n3- Caperucita\n-----> ");
-        devolver = leer.nextInt();
-        System.out.println(" ");
+        System.out.println("[U]                                      \u001B[31m[L][C]\u001B[0m");
+        System.out.print("\n1- Ninguno\n2- El Lobo\n3- Caperucita\n-----> ");
+        devolver= leer.nextInt();
         switch (devolver) {
             case 1:mostrarGameover("El Lobo se Comio a Caperucita");break;
-            case 2:mostrarGameover("Hizo el Mismo Movimiento");break;
-            case 3:llevarUvasConCaperucita(leer);break;
+            case 2:flag = true;acompañanteCaperucita(leer);break;
+            case 3:llevarCaperucitaConUvas(leer);break;
         }
     }
-    public static void llevarUvasConCaperucita(Scanner leer) {
+    public static void llevarUvasACaperucita(Scanner leer) {
         int sujeto3;
         Animations.Barco2(1);
         Animations.barcoImagen2();
-        System.out.println("\n\nUsted ha Elegido las \u001B[32mUvas\u001B[0m");
-        System.out.println("Ahora Caperucita Esta del Lado Original con las Uvas");
-        System.out.println("¿Ahora a Cual Desea Llevar al Otro Lado del Rio con El Lobo");
-        System.out.println("1- Ninguno\n2- Caperucita\n3- Uvas\n-----> ");
+        System.out.println("[L]                                      \u001B[31m[U][C]\u001B[0m");
+        System.out.print("\n1- Ninguno\n2- Uvas\n3- Caperucita\n-----> ");
         sujeto3 = leer.nextInt();
-        System.out.println(" ");
         switch (sujeto3) {
             case 1:mostrarGameover("Caperucita se Comio a las Uvas");break;
-            case 2:mostrarGameover("Hizo el Mismo Movimiento");break;
+            case 2:flag = true;acompañanteCaperucita(leer); ;break;
+            case 3:llevarCaperucitaAlLobo(leer);break;
+        }
+    }
+    public static void llevarCaperucitaAlLobo(Scanner leer){
+         int sujeto3;
+        Animations.Barco3(1);
+        Animations.barcoImagen1();
+        System.out.println("\u001B[31m[L][C]\u001B[0m                                      [U]");
+        System.out.print("\n1- Ninguno\n2- Caperucita\n3- Lobo\n-----> ");
+        sujeto3 = leer.nextInt();
+        switch (sujeto3) {
+            case 1:mostrarGameover("Caperucita se Comio a las Uvas");break;
+            case 2:llevarUvasACaperucita(leer);break;
             case 3:llevarUvasConLobo(leer);break;
         }
     }
-
-    public static void llevarUvasConLobo(Scanner leer) {
-        int devolver2;
-        System.out.println("Usted ha Elegido las Uvas");
-        System.out.println("Ahora las Uvas Están del Otro Lado del Rio con El Lobo");
-        System.out.println("¿Desea Regresar Con Alguno?");
-        System.out.println("1- Ninguno\n2- Las Uvas\n3- El Lobo\n-----> ");
-        devolver2 = leer.nextInt();
-        System.out.println(" ");
-
-        switch (devolver2) {
-            case 1:
-                mostrarFinal();
-                break;
-            case 2:
-                mostrarGameover("Hizo el Mismo Movimiento");
-                break;
+    public static void llevarCaperucitaConUvas(Scanner leer) {
+        int sujeto3;
+        Animations.Barco3(1);
+        Animations.barcoImagen1();
+        System.out.println("\u001B[31m[U][C]\u001B[0m                                      [L]");
+        System.out.print("\n1- Ninguno\n2- Caperucita\n3- Uvas\n-----> ");
+        sujeto3 = leer.nextInt();
+        switch (sujeto3) {
+            case 1:mostrarGameover("Caperucita se Comio a las Uvas");break;
+            case 2:llevarLoboConCaperucita(leer);break;
+            case 3:llevarUvasConLobo(leer);break;
         }
     }
-
+    public static void llevarUvasConLobo(Scanner leer) {
+        int devolver2;
+        Animations.Barco2(1);
+        Animations.barcoImagen2();
+        System.out.println("[C]                                      [L][U]");
+        System.out.print("\n1- Ninguno\n2- Las Uvas\n3- El Lobo\n-----> ");
+        devolver2 = leer.nextInt();
+        switch (devolver2) {
+            case 1:mostrarFinal();break;
+            case 2:llevarCaperucitaConUvas(leer);break;
+            case 3:llevarCaperucitaAlLobo(leer);break;
+        }
+    }
     public static void mostrarFinal() {
+        Scanner scanner = new Scanner(System.in);
+        Animations.Barco5(1);
+        Animations.barcoImagen3();
+        System.out.println("[C]                                      [L][U]");
         System.out.println("El Hombre Volvio Solo");
         System.out.println("Ahora Caperucita se Monto en la Barca Para Llegar al Otro Lado del Rio");
-        System.out.println(" ");
-        System.out.println("****************************************");
-        System.out.println("Todos los Participantes Esta en el Otro Lado del Rio");
-        System.out.println("Felicidades");
-        System.out.println("Usted ha Ganado El Juego");
-        System.out.println("Fin");
-        System.out.println("****************************************");
+        System.out.println("Presione \u001B[36mEnter\u001B[0m Para Continuar");
+        scanner.nextLine();
+        Animations.Barco4(1);
+        Animations.barcoImagen4();
+        System.out.println("                                          [C][L][U]");
+        System.out.println("Todos los Participantes Están en el Otro Lado del Rio");
+        scanner.close();
+        System.exit(0);
     }
 }
